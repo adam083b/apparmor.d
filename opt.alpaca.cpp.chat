@@ -1,0 +1,15 @@
+# Last Modified: Fri Mar 31 01:18:49 2023
+abi <abi/3.0>,
+
+/opt/alpaca.cpp/chat {
+  /etc/ld.so.cache r,
+  /opt/alpaca.cpp/** r,
+  /opt/alpaca.cpp/main mr,
+  /proc/cpuinfo r,
+  /sys/devices/system/cpu/online r,
+  /usr/lib/x86_64-linux-gnu/libc.so.* mr,
+  /usr/lib/x86_64-linux-gnu/libgcc_s.so.* mr,
+  /usr/lib/x86_64-linux-gnu/libm.so.* mr,
+  /usr/lib/x86_64-linux-gnu/libstdc++.so.* mr,
+
+}

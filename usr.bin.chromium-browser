@@ -1,0 +1,261 @@
+# Last Modified: Sat Sep 10 23:33:44 2022
+include <tunables/global>
+
+# Author: Jamie Strandboge <jamie@canonical.com>
+# We need 'flags=(attach_disconnected)' in newer chromium versions
+
+
+/usr/lib/chromium-browser/chromium-browser flags=(attach_disconnected) {
+  include <abstractions/audio>
+  include <abstractions/cups-client>
+  include <abstractions/dbus-session>
+  include <abstractions/gnome>
+  include <abstractions/ibus>
+  include <abstractions/nameservice>
+  include <abstractions/postfix-common>
+  include <abstractions/ubuntu-browsers.d/chromium-browser>
+  include <abstractions/ubuntu-konsole>
+  include <abstractions/user-tmp>
+  include <local/usr.bin.chromium-browser>
+
+  capability sys_admin,
+
+  network inet stream,
+  network inet6 stream,
+
+  ptrace read peer=/usr/lib/chromium-browser/chromium-browser//xdgsettings,
+  ptrace read peer=unconfined,
+  ptrace trace peer=@{profile_name},
+  ptrace trace peer=@{profile_name}//lsb_release,
+  ptrace trace peer=@{profile_name}//xdgsettings,
+
+  unix (receive, send) peer=(label=/usr/lib/chromium-browser/chromium-browser//chromium_browser_sandbox),
+
+  deny /run/udev/data/** r,
+  deny /usr/lib/chromium-browser/** w,
+  deny @{PROC}/[0-9]*/oom_{,score_}adj w,
+
+  / r,
+  /**/ r,
+  /bin/ps rUx,
+  /etc/chromium-browser/policies/** r,
+  /etc/firefox/profile/bookmarks.html r,
+  /etc/mailcap r,
+  /etc/mime.types r,
+  /etc/mtab r,
+  /etc/passwd m,
+  /etc/udev/udev.conf r,
+  /etc/xdg/xubuntu/applications/defaults.list r,
+  /home/*/#* m,
+  /home/*/.cache/mesa_shader_cache/** k,
+  /home/*/.config/chromium/WidevineCdm/4.10.2391.0/_platform_specific/linux_x64/libwidevinecdm.so m,
+  /proc/*/clear_refs w,
+  /proc/*/gid_map w,
+  /proc/*/uid_map w,
+  /proc/sys/dev/i915/perf_stream_paranoid r,
+  /proc/sys/fs/inotify/max_user_watches r,
+  /sys/devices/**/uevent r,
+  /sys/devices/pci*/**/**/**/devnum r,
+  /sys/devices/pci*/**/**/**/manufacturer r,
+  /sys/devices/pci*/**/**/**/product r,
+  /sys/devices/pci*/**/**/**/serial r,
+  /sys/devices/pci*/**/**/bConfigurationValue r,
+  /sys/devices/pci*/**/**/busnum r,
+  /sys/devices/pci*/**/**/descriptors r,
+  /sys/devices/pci*/**/config r,
+  /sys/devices/pci*/**/subsystem_device r,
+  /sys/devices/pci*/**/subsystem_vendor r,
+  /sys/devices/pci*/**/revision r,
+  /sys/devices/pci[0-9a-f]*/**/block/**/size r,
+  /sys/devices/pci[0-9a-f]*/**/class r,
+  /sys/devices/pci[0-9a-f]*/**/device r,
+  /sys/devices/pci[0-9a-f]*/**/irq r,
+  /sys/devices/pci[0-9a-f]*/**/removable r,
+  /sys/devices/pci[0-9a-f]*/**/resource r,
+  /sys/devices/pci[0-9a-f]*/**/vendor r,
+  /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_max_freq r,
+  /sys/devices/system/cpu/cpufreq/*/scaling_cur_freq r,
+  /sys/devices/system/cpu/cpufreq/*/scaling_max_freq r,
+  /sys/devices/virtual/block/**/removable r,
+  /sys/devices/virtual/block/**/size r,
+  /sys/devices/virtual/dmi/id/product_name r,
+  /sys/devices/virtual/dmi/id/sys_vendor r,
+  /sys/devices/virtual/tty/*/active r,
+  /tmp/** mrwlk,
+  /usr/bin/gnome-open rix,
+  /usr/bin/gvfs-open rix,
+  /usr/bin/kdialog rix,
+  /usr/bin/lsb_release rCx -> lsb_release,
+  /usr/bin/xdg-open rix,
+  /usr/bin/xdg-settings rCx -> xdgsettings,
+  /usr/lib/chromium-browser/*.pak mr,
+  /usr/lib/chromium-browser/chrome-sandbox cx -> chromium_browser_sandbox,
+  /usr/lib/chromium-browser/chrome_crashpad_handler mrix,
+  /usr/lib/chromium-browser/chromium-browser ix,
+  /usr/lib/chromium-browser/chromium-browser-sandbox cx -> chromium_browser_sandbox,
+  /usr/lib/chromium-browser/locales/* mr,
+  /usr/lib/chromium-browser/xdg-settings rCx -> xdgsettings,
+  /usr/share/fonts/**/*.pfb m,
+  /usr/share/fonts/truetype/**/*.tt[cf] m,
+  /usr/share/icons/**/*.cache m,
+  /usr/share/mime/mime.cache m,
+  /usr/{include,share,src}** r,
+  @{PROC}/ r,
+  @{PROC}/[0-9]*/fd/ r,
+  @{PROC}/[0-9]*/net/if_inet6 r,
+  @{PROC}/[0-9]*/net/ipv6_route r,
+  @{PROC}/[0-9]*/smaps r,
+  @{PROC}/[0-9]*/stat r,
+  @{PROC}/[0-9]*/statm r,
+  @{PROC}/[0-9]*/status r,
+  @{PROC}/[0-9]*/task/[0-9]*/stat r,
+  @{PROC}/[0-9]*/task/[0-9]*/status r,
+  @{PROC}/sys/kernel/shmmax r,
+  @{PROC}/sys/kernel/yama/ptrace_scope r,
+  @{PROC}/vmstat r,
+  owner /etc/igfx_user_feature.txt w,
+  owner /etc/igfx_user_feature_next.txt w,
+  owner /proc/*/mem r,
+  owner /run/user/*/at-spi/bus* rw,
+  owner /{,var/}run/shm/shmfd* mrw,
+  owner /{,var/}run/user/*/dconf/ rw,
+  owner /{,var/}run/user/*/dconf/user rw,
+  owner /{dev,run}/shm/pulse-shm* m,
+  owner /{dev,run}/shm/{,.}org.chromium.* mrw,
+  owner @{HOME}/ r,
+  owner @{HOME}/.cache/chromium/ rw,
+  owner @{HOME}/.cache/chromium/** rw,
+  owner @{HOME}/.cache/chromium/Cache/* mr,
+  owner @{HOME}/.config/chromium/ rw,
+  owner @{HOME}/.config/chromium/** rwk,
+  owner @{HOME}/.config/chromium/**/Cache/* mr,
+  owner @{HOME}/.config/chromium/**/Dictionaries/*.bdic mr,
+  owner @{HOME}/.config/chromium/Dictionaries/*.bdic mr,
+  owner @{HOME}/.config/dconf/user r,
+  owner @{HOME}/.local/share/applications/defaults.list r,
+  owner @{HOME}/.local/share/applications/mimeinfo.cache r,
+  owner @{HOME}/.local/share/mime/mime.cache m,
+  owner @{HOME}/.mozilla/** k,
+  owner @{HOME}/.mozilla/firefox/*/prefs.js r,
+  owner @{HOME}/.mozilla/firefox/profiles.ini r,
+  owner @{HOME}/.pki/nssdb/* rwk,
+  owner @{HOME}/Downloads/ r,
+  owner @{HOME}/Downloads/* rw,
+  owner @{HOME}/Public/ r,
+  owner @{HOME}/Public/* r,
+  owner @{PROC}/[0-9]*/auxv r,
+  owner @{PROC}/[0-9]*/cmdline r,
+  owner @{PROC}/[0-9]*/io r,
+  owner @{PROC}/[0-9]*/setgroups w,
+
+
+  profile chromium_browser_sandbox flags=(attach_disconnected) {
+    capability chown,
+    capability dac_override,
+    capability fsetid,
+    capability setgid,
+    capability setuid,
+    capability sys_admin,
+    capability sys_chroot,
+    capability sys_ptrace,
+
+    signal (receive send) set=exists,
+    signal peer=@{profile_name},
+    signal receive peer=/usr/lib/chromium-browser/chromium-browser,
+    signal receive peer=unconfined,
+
+    ptrace (read readby),
+
+    unix (receive, send) peer=(label=/usr/lib/chromium-browser/chromium-browser),
+    unix (create),
+    unix peer=(label=@{profile_name}),
+    unix (getattr, getopt, setopt, shutdown) addr=none,
+
+    deny @{PROC}/[0-9]*/oom_adj w,
+    deny @{PROC}/[0-9]*/oom_score_adj w,
+
+    /dev/null rw,
+    /etc/ld.so.cache r,
+    /lib/@{multiarch}/ld-*.so* mr,
+    /lib/@{multiarch}/libc-*.so* mr,
+    /lib/@{multiarch}/libgcc_s.so* mr,
+    /lib/@{multiarch}/libld-*.so* mr,
+    /lib/@{multiarch}/libm-*.so* mr,
+    /lib/@{multiarch}/libpthread-*.so* mr,
+    /lib/libgcc_s.so* mr,
+    /lib/tls/*/{cmov,nosegneg}/libc-*.so* mr,
+    /lib/tls/*/{cmov,nosegneg}/libm-*.so* mr,
+    /lib/tls/*/{cmov,nosegneg}/libpthread-*.so* mr,
+    /lib/x86_64-linux-gnu/librt-*.so r,
+    /lib{,32,64}/ld-*.so* mr,
+    /lib{,32,64}/libc-*.so* mr,
+    /lib{,32,64}/libld-*.so* mr,
+    /lib{,32,64}/libm-*.so* mr,
+    /lib{,32,64}/libpthread-*.so* mr,
+    /usr/bin/chromium-browser r,
+    /usr/lib/@{multiarch}/libstdc++.so* mr,
+    /usr/lib/chromium-browser/chrome-sandbox mr,
+    /usr/lib/chromium-browser/chromium-browser Px,
+    /usr/lib/chromium-browser/chromium-browser-sandbox mr,
+    /usr/lib/libstdc++.so* mr,
+    @{PROC}/ r,
+    @{PROC}/[0-9]*/ r,
+    @{PROC}/[0-9]*/fd/ r,
+    @{PROC}/[0-9]*/status r,
+    @{PROC}/[0-9]*/task/[0-9]*/stat r,
+    owner /tmp/** rw,
+
+  }
+
+  profile lsb_release flags=(attach_disconnected) {
+    include <abstractions/base>
+    include <abstractions/python>
+
+    /bin/dash rix,
+    /etc/apt/apt.conf.d/ r,
+    /etc/debian_version r,
+    /etc/default/apport r,
+    /etc/lsb-release r,
+    /usr/bin/ r,
+    /usr/bin/dpkg-query rix,
+    /usr/bin/lsb_release r,
+    /usr/bin/python3.[0-6] mr,
+    /usr/include/python2.[4567]/pyconfig.h r,
+    /usr/local/lib/python3.[0-4]/dist-packages/ r,
+    /usr/share/distro-info/* r,
+    /usr/share/dpkg/cputable r,
+    /var/lib/dpkg/** r,
+
+  }
+
+  profile xdgsettings flags=(attach_disconnected) {
+    include <abstractions/bash>
+    include <abstractions/gnome>
+    include <abstractions/gvfs-open>
+
+    /bin/dash rix,
+    /bin/grep rix,
+    /bin/mkdir rix,
+    /bin/mv rix,
+    /bin/readlink rix,
+    /bin/sed rix,
+    /bin/touch rix,
+    /bin/which rix,
+    /etc/ld.so.cache r,
+    /usr/bin/[gm]awk rix,
+    /usr/bin/basename rix,
+    /usr/bin/cut rix,
+    /usr/bin/dirname rix,
+    /usr/bin/gconftool-2 ix,
+    /usr/bin/head rix,
+    /usr/bin/tr rix,
+    /usr/bin/xdg-mime rix,
+    /usr/bin/xdg-settings r,
+    /usr/lib/chromium-browser/xdg-settings r,
+    /usr/share/applications/*.desktop r,
+    /usr/share/ubuntu/applications/ r,
+    owner @{HOME}/.local/share/applications/ w,
+    owner @{HOME}/.local/share/applications/mimeapps.list* rw,
+
+  }
+}

@@ -1,0 +1,38 @@
+# Last Modified: Sat Jan 14 17:52:00 2023
+abi <abi/3.0>,
+
+include <tunables/global>
+
+/opt/jd2/JDownloader2 {
+  include <abstractions/base>
+  include <abstractions/bash>
+  include <abstractions/lightdm>
+
+  /opt/jd2/JDownloader2 r,
+  /proc/*/cgroup r,
+  /proc/*/net/if_inet6 r,
+  /proc/cgroups r,
+  /proc/cpuinfo r,
+  /proc/filesystems r,
+  /proc/stat r,
+  /proc/sys/vm/overcommit_memory r,
+  /proc/version_signature r,
+  /usr/bin/basename mrix,
+  /usr/bin/dash ix,
+  /usr/bin/date mrix,
+  /usr/bin/dirname mrix,
+  /usr/bin/expr mrix,
+  /usr/bin/mkdir mrix,
+  /usr/lib/jvm/java-11-openjdk-amd64/bin/java mrix,
+  owner /opt/jd2/logs/** mrwk,
+  owner @{HOME}/Desktop/* rw,
+  owner @{HOME}/.cache/install4j/jre_version r,
+  owner @{HOME}/.Xauthority r,
+  owner @{HOME}/.config/dconf/user r,
+  owner @{HOME}/.java/.userPrefs/.user.lock.* wk,
+  owner @{HOME}/.java/fonts/** r,
+  owner /opt/jd2/** mrwk,
+  owner /proc/*/coredump_filter rw,
+  owner /proc/*/mountinfo r,
+
+}
