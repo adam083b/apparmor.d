@@ -1,0 +1,29 @@
+# Last Modified: Fri Nov 15 20:27:55 2024
+abi <abi/3.0>,
+
+include <tunables/global>
+
+/usr/bin/dosbox-x {
+  include <abstractions/base>
+  include <abstractions/dbus-session>
+  include <abstractions/lightdm>
+
+  deny network inet,
+  deny network inet6,
+  deny network raw,
+
+  /proc/sys/dev/i915/perf_stream_paranoid r,
+
+  /share/ r,
+  owner /share/jeux/ r,
+  owner /share/jeux/** r,
+  owner /share/jeux/emulateurs/dosbox-x/** rwk,
+
+  owner @{HOME}/.Xauthority r,
+  owner @{HOME}/.cache/mesa_shader_cache/** rw,
+  owner @{HOME}/.config/gtk-3.0/bookmarks r,
+  owner @{HOME}/.config/pulse/cookie rk,
+  owner @{HOME}/.icons/ r,
+  owner @{HOME}/.local/share/recently-used.xbel* rw,
+
+}
