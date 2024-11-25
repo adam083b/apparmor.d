@@ -20,7 +20,7 @@ include <tunables/global>
   owner /share/jeux/emulateurs/dosbox-x/** rwk,
 
   owner @{HOME}/.Xauthority r,
-  owner @{HOME}/.cache/mesa_shader_cache/** rw,
+  owner @{HOME}/.cache/mesa_shader_cache/** rwk,
   owner @{HOME}/.config/gtk-3.0/bookmarks r,
   owner @{HOME}/.config/pulse/cookie rk,
   owner @{HOME}/.icons/ r,
